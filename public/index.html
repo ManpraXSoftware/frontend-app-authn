@@ -1,26 +1,130 @@
 <!doctype html>
 <html lang="en-us">
-  <head>
-      <title><%= (process.env.SITE_NAME && process.env.SITE_NAME != 'null') ? 'Authentication | ' + process.env.SITE_NAME : 'Authentication' %></title>    
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link rel="shortcut icon" href="<%=htmlWebpackPlugin.options.FAVICON_URL%>" type="image/x-icon"/>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.4.4/iframeResizer.contentWindow.min.js"
-              integrity="sha512-IWwZFBvHzN41wNI6etRLLuLrDDj/6AwJcPt7cmKJAzluYTIHHQ1PF8wh0rSy05jxEvvjflVvH2MxeV6riyEEXg=="
-              crossorigin="anonymous"
-              referrerpolicy="no-referrer">
-      </script>
-      <% if (process.env.OPTIMIZELY_URL) { %>
-        <script
-          src="<%= process.env.OPTIMIZELY_URL %>"
-        ></script>
-      <% } else if (process.env.OPTIMIZELY_PROJECT_ID) { %>
-        <script
-          src="<%= process.env.MARKETING_SITE_BASE_URL %>/optimizelyjs/<%= process.env.OPTIMIZELY_PROJECT_ID %>.js"
-        ></script>
+
+<head>
+  <title id="auth_page_title">
+    <%= (process.env.SITE_NAME && process.env.SITE_NAME !='null' ) ? 'Authentication | ' + process.env.SITE_NAME
+      : 'Authentication' %>
+  </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="../src/images/favicon.ico" type="image/x-icon" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.4.4/iframeResizer.contentWindow.min.js"
+    integrity="sha512-IWwZFBvHzN41wNI6etRLLuLrDDj/6AwJcPt7cmKJAzluYTIHHQ1PF8wh0rSy05jxEvvjflVvH2MxeV6riyEEXg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
+  <% if (process.env.OPTIMIZELY_URL) { %>
+    <script src="<%= process.env.OPTIMIZELY_URL %>"></script>
+    <% } else if (process.env.OPTIMIZELY_PROJECT_ID) { %>
+      <script
+        src="<%= process.env.MARKETING_SITE_BASE_URL %>/optimizelyjs/<%= process.env.OPTIMIZELY_PROJECT_ID %>.js"></script>
       <% } %>
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+</head>
+
+<body>
+  <div id="root"></div>
+</body>
+<select id="langOptions" class="myLang" aria-label="Selected language" onchange="chngLang()">
+</select>
+
 </html>
+<script src="https://global.localizecdn.com/localize.js"></script>
+<script>!function (a) { if (!a.Localize) { a.Localize = {}; for (var e = ["translate", "untranslate", "phrase", "initialize", "translatePage", "setLanguage", "getLanguage", "getSourceLanguage", "detectLanguage", "getAvailableLanguages", "untranslatePage", "bootstrap", "prefetch", "on", "off", "hideWidget", "showWidget"], t = 0; t < e.length; t++)a.Localize[e[t]] = function () { } } }(window);</script>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+  crossorigin="anonymous"></script>
+<script>
+  Localize.initialize({
+    key: 'zKxxnKn5hZxwu',
+    rememberLanguage: true,
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    Localize.getAvailableLanguages((error, data) => {
+      for (var i = 0; i < data.length; i++) {
+        var e = data[i];
+        lang_name = e.name;
+        if (e.code == "hi-IN" || e.code == "hi") {
+          lang_name = e.name + "(Hindi)";
+        } else if (e.code == "kn") {
+          lang_name = e.name + "(Kannada)";
+        } else if (e.code == "bn") {
+          lang_name = e.name + "(Bangali)"
+        } else if (e.code == "en") {
+          lang_name = e.name + "(English)"
+        } else if (e.code == "ta-IN") {
+          lang_name = e.name + "(Tamil (India))"
+        } else if (e.code == "or") {
+          lang_name = e.name + "(Odia)"
+        } else if (e.code == "ml-IN" || e.code == "ml") {
+          lang_name = e.name + "(Malayalam)"
+        }
+
+        var newOpns = new Option(lang_name, e.code);
+        $("#langOptions").append(newOpns);
+      }
+    });
+
+    setTimeout(() => {
+      Localize.untranslate($("#langOptions").get(0));
+    }, 100);
+    
+    $.ajax({
+      type: "GET", url: "http://local.edly.io:8000/mx-user-info/get_user_profile",
+      success: function (data) {
+        let selectTag = document.getElementById("langOptions");
+        for (let i = 0; i < data.dark_languages.length; i++) {
+          var code = data.dark_languages[i][0]
+          var name = data.dark_languages[i][1]
+          if (code != 'en') {
+            if (code == "hi-IN" || code == "hi") {
+              name = name + "(Hindi)";
+            } else if (code == "kn") {
+              name = name + "(Kannada)";
+            } else if (code == "bn") {
+              name = name + "(Bangali)"
+            } else if (code == "en") {
+              name = name + "(English)"
+            } else if (code == "ta-IN") {
+              name = name + "(Tamil (India))"
+            } else if (code == "or") {
+              name = name + "(Odia)"
+            } else if (code == "ml-IN" || code == "ml") {
+              name = name + "(Malayalam)"
+            }
+            var option = new Option(name, code)
+            selectTag.append(option)
+          }
+        }
+      },
+      failure: function (data) {
+        console.log("failure");
+        console.log(data);
+      },
+    });
+
+  })
+
+  function chngLang() {
+    var setLang = $('.myLang').val();
+    let curr_ln = '${LANGUAGE_CODE}';
+    let current_url = window.location.href;
+    let flag = true;
+    localStorage.setItem("langButtonClicked", true);
+    localStorage.setItem("lang", $(".myLang").val())
+    Localize.setLanguage(setLang);
+    var opVal = $('#langOptions option').val()
+    $('#langOptions > option').each(function () {
+      if (setLang == $(this).val()) {
+        $(this).attr('selected', true);
+      } else {
+        $(this).removeAttr("selected");
+      }
+    })
+
+    setTimeout(() => {
+      Localize.untranslate($(".myLang").get(0));
+    }, 100);
+  }
+</script>
