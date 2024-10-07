@@ -24,7 +24,7 @@
 <body>
   <div id="root"></div>
 </body>
-<select id="langOptions" class="myLang" aria-label="Selected language" onchange="chngLang()">
+<select id="langOptions" class="myLang" aria-label="Selected language">
 </select>
 
 </html>
@@ -38,9 +38,20 @@
     rememberLanguage: true,
   });
 </script>
-
+<!-- 
 <script>
+  function getCurrentLang() {
+    var cookies_array = document.cookie.split(";")
+    for (let cookie of cookies_array) {
+      const [cookieName, cookieValue] = cookie.split("=");
+      if (cookieName.includes('lang')) {
+        return cookieValue
+      }
+    }
+    return 'en'
+  }
   $(document).ready(function () {
+    let curr_lang = getCurrentLang();
     Localize.getAvailableLanguages((error, data) => {
       for (var i = 0; i < data.length; i++) {
         var e = data[i];
@@ -69,7 +80,7 @@
     setTimeout(() => {
       Localize.untranslate($("#langOptions").get(0));
     }, 100);
-    
+
     $.ajax({
       type: "GET", url: "http://local.edly.io:8000/mx-user-info/get_user_profile",
       success: function (data) {
@@ -103,7 +114,17 @@
         console.log(data);
       },
     });
-
+    var opVal = $('#langOptions option').val();
+    var langSelect = document.getElementById("langOptions").options
+    for (let i = 0; i < langSelect.length; i++) {
+      console.log("AAAAAAAAa")
+        if (curr_lang == langSelect[i].value) {
+          langSelect[i].setAttribute("selected", true)
+        }
+        else{
+          langSelect[i].removeAttribute("selected")
+        }
+      }
   })
 
   function chngLang() {
@@ -127,4 +148,4 @@
       Localize.untranslate($(".myLang").get(0));
     }, 100);
   }
-</script>
+</script> -->
