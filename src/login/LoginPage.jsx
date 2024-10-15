@@ -115,6 +115,7 @@ import axios from 'axios';
       ).then((res) => {
         if (res.status == 200 && res.data.success == true) {
           window.location = res.data.redirect_url
+          Cookies.set('email', this.state.email, { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })   
         }
       })
   }
@@ -130,6 +131,7 @@ import axios from 'axios';
       ).then((res) => {
         if(res.status == 200){
           this.setState({loginPage:true});
+
           document.getElementById("forgot_password_success").style.display="block";
         }
       })
