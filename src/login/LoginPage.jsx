@@ -117,7 +117,25 @@ import axios from 'axios';
           window.location = res.data.redirect_url
           Cookies.set('email', this.state.email, { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })   
         }
+        
       })
+      .catch((error) => {
+        if (error.response && error.response.status === 400) {
+          const responseData = error.response.data;
+          if (responseData.success === false && responseData.value) {
+            // alert(`Login Failed: ${responseData.value}`);
+            document.getElementById("login_error_box").style.display="block";
+            document.getElementById("error_msg").innerHTML = responseData.value;
+          } else {
+            alert("Login Failed: Invalid request. Please check your input.");
+          }
+        } else {
+          // Handle other types of errors
+          console.error("An unexpected error occurred:", error);
+          alert("An unexpected error occurred. Please try again later.");
+        }
+      });
+
   }
 
   ForgotPasswordForm = () => {
@@ -186,6 +204,16 @@ import axios from 'axios';
                       <p>You entered <b>{this.forgotEmail}</b>. If this email address is associated with your Subodha account, we will send a message with password recovery instructions to this email address.</p><p>If you do not receive a password reset message after 1 minute, verify that you entered the correct email address, or check your spam folder.</p><p>If you need further assistance, <a href="">contact technical support</a>.</p>
                     </div>
                   </div>
+
+                  <div className="js-form-feedback" id="login_error_box" aria-live="assertive" tabindex="-1" style={{display:"none"}}>
+                    <div className="js-form-errors status submission-error">
+                    <h4 className="message-title">We could not sign you in.</h4>
+                    <ul className="message-copy">
+                        <li id="error_msg"></li>
+                    </ul>
+                    </div>
+                  </div>
+
                 </div>
                 <h2>Sign In</h2>
                 <form id="login" className="login-form" tabIndex={-1} onSubmit={(e) => { e.preventDefault(); this.SubmitLoginForm() }}>
