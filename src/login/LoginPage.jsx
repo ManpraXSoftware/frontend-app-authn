@@ -45,7 +45,7 @@ import axios from 'axios';
         } else if (e.code == "ml-IN" || e.code == "ml") {
           lang_name = e.name + "(Malayalam)"
         }
-        lang_dict.push({ "name": e.name, "code": e.code })
+        lang_dict.push({ "name": lang_name, "code": e.code })
       })
     });
     axios.get(`${getConfig().LMS_BASE_URL}` + '/mx-user-info/get_user_profile').then((res) => {
@@ -67,6 +67,9 @@ import axios from 'axios';
             name = name + "(Odia)"
           } else if (code == "ml-IN" || code == "ml") {
             name = name + "(Malayalam)"
+          }
+          else if (code == "gu") {
+            name = name + "(Gujrati)"
           }
 
           darkLang.push(code)
