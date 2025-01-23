@@ -140,6 +140,7 @@ import axios from 'axios';
       });
 
   }
+  
 
   ForgotPasswordForm = () => {
     getAuthenticatedHttpClient()
@@ -155,9 +156,23 @@ import axios from 'axios';
 
           document.getElementById("forgot_password_success").style.display="block";
         }
+        
       })
-      .catch((e) => {
-        console.log(e.customAttributes.httpErrorResponseData)
+      .catch((error) => {
+        console.log(error.customAttributes.httpErrorResponseData)
+        if (error.response && error.response.status === 400) {
+          const responseData = error.response.data;
+          if (responseData) {
+            document.getElementById("login_pass_error_box").style.display="block";
+            document.getElementById("error_pass_msg").innerHTML = responseData;
+          } else {
+            alert("Not able to process the request.");
+          }
+        } else {
+          // Handle other types of errors
+          console.error("An unexpected error occurred:", error);
+          alert("An unexpected error occurred. Please try again later.");
+        }
       })
   }
 
@@ -254,7 +269,17 @@ import axios from 'axios';
             </section> :
               <><section id="login-anchor" className="form-type"></section>
                 <section id="password-reset-anchor" className="form-type">
-                  <div className="js-form-feedback" aria-live="assertive" tabIndex={-1}>
+                  {/* <div className="js-form-feedback" aria-live="assertive" tabIndex={-1}> */}
+
+                  <div className="js-form-feedback" id="login_pass_error_box" aria-live="assertive" tabindex="-1" style={{display:"none"}}>
+                    <div className="js-form-errors status submission-error">
+                    <h4 className="message-title">An error occurred.</h4>
+                    <ul className="message-copy">
+                        <li id="error_pass_msg"></li>
+                    </ul>
+                    </div>
+                  {/* </div> */}
+
                   </div>
                   <h1 className="section-title">Password assistance</h1>
                   <form id="password-reset" className="password-reset-form" tabIndex={-1} onSubmit={(e) => { e.preventDefault(); this.ForgotPasswordForm() }}>
