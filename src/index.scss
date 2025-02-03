@@ -56,12 +56,18 @@
     display: inline-block;
 }
 
+.main-content, .pt-4, .py-4 {
+    padding-top: 1.3rem !important;
+}
+
 .login-upper-logo p {
-    width: 90%;
+    width: 35%;
     margin-left: auto;
     margin-right: auto;
     display: block;
 }
+
+
 
 .login-register .login_top {
     margin-bottom: 20px;
@@ -104,6 +110,7 @@
     color: #1a1a1a;
     cursor: pointer;
     box-shadow: none;
+    font-weight: 600;
 }
 
 .login-bottom-logo {
@@ -127,6 +134,7 @@
 .login-bottom-logo .for-text span {
     display: block;
     margin-bottom: 5px;
+    font-size: 15px;
 }
 
 .login-bottom-logo .subodha-logo {
@@ -143,8 +151,9 @@
 }
 
 .login-bottom-logo .for-align {
-    width: inherit;
-    float: initial;
+    text-align: center; 
+    max-width: 500px; 
+    width: 35%; 
 }
 
 .password-success .form-type {
@@ -249,9 +258,8 @@
 
 
 .login-register {
-    padding: 20px 0px 20px;
-    // width: 30%;
-    width: 27%;
+    padding: 20px 0;
+    width: 35%;
     float: right;
     margin: 0px;
     margin-right: 70px;
@@ -302,7 +310,7 @@ body, a, p, span, small, h1, h2, h3, h4, h5, h6, h1 span, h2 span, h3 span, h4 s
 .label-text {
     font-family: "Segoe UI";
     text-shadow: none;
-    font-size: 1rem;
+    // font-size: 1rem;
     margin: auto;
 }
 
@@ -415,6 +423,7 @@ span {
     text-align: center;
     -ms-text-align-last: center;
     -moz-text-align-last: center;
+    font-size: 15px;
 }
 
 .myLang:focus {
@@ -438,4 +447,19 @@ span {
 
 .js-form-errors .message-title ul li {
     margin: 0 0 5px 20px;
+}
+
+
+// @media(min-width:1440px) and (max-width: 2560px){
+ 
+//     .login-register{
+//     width: 35%; 
+//     }
+// }
+
+
+@media(min-width: 1200px)and (max-width:2500px){
+    .login-register{
+      width:27%;
+    }
 }

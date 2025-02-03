@@ -261,7 +261,8 @@ import axios from 'axios';
                     <button type="button" className="forgot-password field-link" onClick={(e)=>{this.setState({loginPage:false})}}>Forgot Password?</button>
                   </div>
                   <button type="submit" className="action action-primary action-update js-login login-button">Sign in</button>
-                  <div className="register-info-message">To create a new account please write to<a href="mailto:subodhavisionempowertrust@gmail.com
+                  <div className="register-info-message">To create a new account please write to
+                    <br></br><a href="mailto:subodhavisionempowertrust@gmail.com
 ">subodhavisionempowertrust@gmail.com
                   </a></div>
                 </form>
