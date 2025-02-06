@@ -54,10 +54,11 @@
 
 .login-upper-logo span {
     display: inline-block;
+    color: #212529;
 }
 
 .main-content, .pt-4, .py-4 {
-    padding-top: 1.3rem !important;
+    padding-top: 1.30rem !important;
 }
 
 .login-upper-logo p {
@@ -296,7 +297,7 @@ body, a, p, span, small, h1, h2, h3, h4, h5, h6, h1 span, h2 span, h3 span, h4 s
     margin-top: 24px;
     letter-spacing: normal;
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #06569B;
+    color: #065683;
     font-family: 'Segoe UI';
     font-size: 24px;
     line-height: 35.52px;
@@ -306,14 +307,24 @@ body, a, p, span, small, h1, h2, h3, h4, h5, h6, h1 span, h2 span, h3 span, h4 s
 .action-label {
     font-size: 13px;
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #212529;
 }
 .label-text {
-    font-family: "Segoe UI";
+    font-family: "Segoe UI" !important;
     text-shadow: none;
-    // font-size: 1rem;
     margin: auto;
 }
 
+#password-reset label{
+    margin-bottom: unset;
+}
+
+#password-reset .label-text{
+    color: black;
+    font-weight: 500;
+    font-size: 16px;
+}
+ 
 span {
     color: inherit;
     font: inherit;
@@ -325,6 +336,17 @@ span {
     width: 100%;
     margin: 0 0 5px;
     padding: 0 10px;
+}
+
+#password-reset-email {
+    display: block;
+    height: 33px;
+    margin: 0 0 5px;
+    padding: 0 10px;
+    width: 100%;
+    font-size: 16px;
+    border-radius: unset;
+    border: 1px solid #c8c8c8;
 }
 
 .action-primary {
@@ -463,3 +485,47 @@ span {
       width:27%;
     }
 }
+
+
+.login-register-content{
+    max-width: 1920px;
+    margin-left: auto;
+    margin-right: auto;
+    }
+    
+@media (max-width: 991px) {
+.login-register-content {
+    background-size: 74%;
+    background-position-y: 186px;
+    background-position-x: -79px;
+}
+}
+
+@media (max-width: 767px) {
+    .login-register-content {
+        background: none;
+    }
+
+    .login-upper-logo p {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+    }
+
+    .login-register{
+        width: 100%;
+    }
+    .login-register {
+        float: right;  
+        margin-right: 70px; 
+    }
+
+}
+
+
+// @media (min-width: 1900px) {
+//     .login-register {
+//         width: 35% !important;
+//     }
+// }
