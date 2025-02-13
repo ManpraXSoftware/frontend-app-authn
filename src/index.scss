@@ -8,8 +8,8 @@
 .login-register-content {
     background: #fff url("./images/loginpagebg.png") no-repeat;
     background-size: 72% !important;
-    background-position-y: -30px !important;
-    background-position-x: -155px !important;
+    background-position-y: -30px;
+    background-position-x: -155px;
     display: inline-block;
     position: relative;
     width: 100% !important;
@@ -25,11 +25,11 @@
     background: none;
 }
 
-.login-register-content {
-    background-size: 74%;
-    background-position-y: 186px;
-    background-position-x: -79px;
-}
+// .login-register-content {
+//     background-size: 74%;
+//     background-position-y: 186px;
+//     background-position-x: -79px;
+// }
 
 .login-register-content::before {
     background: none;
@@ -90,7 +90,7 @@
 }
 
 .login-register .form-wrapper {
-    padding-top: 0px;
+    padding-top: 5px;
     padding-bottom: 0px;
 }
 
@@ -192,22 +192,29 @@
 }
 
 #login-anchor h2 {
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     margin-top: 0;
 }
 
 #login-anchor .form-field {
     margin-bottom: 12px;
+    padding-top: 9px;
 }
 
 #login-anchor .password_box {
     margin-bottom: 5px;
 }
 
+#login-anchor .form-field:nth-child(2){
+    padding-top: 0px!important;
+    margin-bottom: 12px!important;
+}
+
 #login-anchor .form-field label {
     font-size: 14px;
     color: #fff;
     margin-bottom: 5px;
+    font-weight: 500;
 }
 
 #login-anchor .form-field .tip-input {
@@ -254,12 +261,13 @@
 #login-anchor {
     background: #001b42;
     border-radius: 10px;
-    padding: 20px;
+    padding: 20px 20px !important;
+    margin: 5px 0px !important;
 }
 
 
 .login-register {
-    padding: 20px 0;
+    padding: 13px 0px 20px;
     width: 35%;
     float: right;
     margin: 0px;
@@ -302,6 +310,10 @@ body, a, p, span, small, h1, h2, h3, h4, h5, h6, h1 span, h2 span, h3 span, h4 s
     font-size: 24px;
     line-height: 35.52px;
     font-weight: 500;
+}
+
+.login-register-content h2{
+    line-height: normal !important;
 }
 
 .action-label {
@@ -515,8 +527,7 @@ span {
 
     .login-register{
         width: 100%;
-    }
-    .login-register {
+        margin-right: unset;
         float: right;  
         margin-right: 70px; 
     }
