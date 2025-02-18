@@ -21,8 +21,18 @@ import axios from 'axios';
 
   componentDidMount(){
     document.getElementById("auth_page_title").innerText = "Welcome to Subodha : Login Page| Subodha"
+    const mx_localizekey = getConfig().MX_LOCALIZEKEY;
+
+
     var darkLang = []
     var current_lang = Cookies.get('lang', { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })
+    if (!current_lang) { // Check for undefined, null, or empty string
+      current_lang = 'en';
+    }
+    // console.log("current lan", current_lang)
+    Localize.initialize({ key: mx_localizekey, rememberLanguage: true });
+
+
     let selectTag = document.getElementById("langOptions");
     selectTag.addEventListener('click', this.handleLangOptionsClick); 
     const lang_dict = []
@@ -103,6 +113,8 @@ import axios from 'axios';
   requestConfig = {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     isPublic: true,
+    'X-Csrftoken': Cookies.get('csrftoken') // Add CSRF token to the headers
+
   };
 
   SubmitLoginForm = () => {
