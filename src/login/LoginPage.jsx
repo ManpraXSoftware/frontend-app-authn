@@ -22,10 +22,11 @@ import axios from 'axios';
   componentDidMount(){
     document.getElementById("auth_page_title").innerText = "Welcome to Subodha : Login Page| Subodha"
     const mx_localizekey = getConfig().MX_LOCALIZEKEY;
+    console.log("site domain at login page",  getConfig().SITE_DOMAIN[0])
 
 
     var darkLang = []
-    var current_lang = Cookies.get('lang', { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })
+    var current_lang = Cookies.get('lang', { domain: getConfig().SITE_DOMAIN[0], path: '/', secure: false, sameSite: "Lax" })
     if (!current_lang) { // Check for undefined, null, or empty string
       current_lang = 'en';
     }
@@ -130,7 +131,7 @@ import axios from 'axios';
       ).then((res) => {
         if (res.status == 200 && res.data.success == true) {
           window.location = res.data.redirect_url
-          Cookies.set('email', this.state.email, { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })   
+          Cookies.set('email', this.state.email, { domain: getConfig().SITE_DOMAIN[0], path: '/', secure: false, sameSite: "Lax" })   
         }
         
       })
@@ -192,8 +193,8 @@ import axios from 'axios';
     var setLang = e.target.value
     localStorage.setItem("langButtonClicked", true);
     localStorage.setItem("lang", e.target.value)
-    Cookies.remove('lang', { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })   
-    Cookies.set('lang', setLang, { domain: process.env.SITE_DOMAIN, path: '/', secure: false, sameSite: "Lax" })   
+    Cookies.remove('lang', { domain: getConfig().SITE_DOMAIN[0], path: '/', secure: false, sameSite: "Lax" })   
+    Cookies.set('lang', setLang, { domain: getConfig().SITE_DOMAIN[0], path: '/', secure: false, sameSite: "Lax" })   
     Localize.setLanguage(setLang);
     $('#langOptions > option').each(function () {
       if (setLang == $(this).val()) {
