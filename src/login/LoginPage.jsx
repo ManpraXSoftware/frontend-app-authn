@@ -50,7 +50,9 @@ import axios from 'axios';
         else if (e.code == "en") {
           lang_name = e.name + "(English)"
         } else if (e.code == "ta-IN") {
-          lang_name = e.name + "(Tamil (India))"
+          // lang_name = e.name + "(Tamil (India))"
+          lang_name = "தமிழ்(Tamil)"
+
         } else if (e.code == "or") {
           lang_name = e.name + "(Odia)"
         } else if (e.code == "ml-IN" || e.code == "ml") {
@@ -73,7 +75,9 @@ import axios from 'axios';
           } else if (code == "en") {
             name = name + "(English)"
           } else if (code == "ta-IN") {
-            name = name + "(Tamil (India))"
+            // name = name + "(Tamil (India))"
+            name = "தமிழ்(Tamil)"
+
           } else if (code == "or") {
             name = name + "(Odia)"
           } else if (code == "ml-IN" || code == "ml") {
