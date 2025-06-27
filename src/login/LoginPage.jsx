@@ -214,6 +214,7 @@ import axios from 'axios';
 
   }
 
+  
   render(){return (
     <div className="section-bkg-wrapper">
       <p id="lms-url" url-data={process.env.LMS_BASE_URL} hidden></p>
