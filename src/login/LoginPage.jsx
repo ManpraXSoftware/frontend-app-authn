@@ -221,7 +221,7 @@ import axios from 'axios';
         <div className="login-upper-logo">
           <p>
             <span tabIndex={0}>
-              <img src={SubodhaLogo} alt='Subodha Learning For All' />
+              <img src={SubodhaLogo} alt='Subodha logo with tag line Learning for all' />
             </span>
             <span className="login-upper-text" tabIndex={0}>
               Subodha is a learning management system containing accessible resources for students with visual impairments and their educators.
