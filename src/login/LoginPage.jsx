@@ -21,7 +21,10 @@ import axios from 'axios';
 
   componentDidMount(){
     document.getElementById("auth_page_title").innerText = "Welcome to Subodha : Login Page| Subodha"
-    const mx_localizekey = getConfig().MX_LOCALIZEKEY;
+    // const mx_localizekey = getConfig().MX_LOCALIZEKEY;
+    const mx_localizekey = Array.isArray(getConfig().MX_LOCALIZEKEY) 
+    ? getConfig().MX_LOCALIZEKEY[0] 
+    : getConfig().MX_LOCALIZEKEY;
     console.log("site domain at login page",  getConfig().SITE_DOMAIN[0])
 
 
