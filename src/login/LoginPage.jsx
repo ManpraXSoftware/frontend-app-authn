@@ -34,7 +34,7 @@ import axios from 'axios';
       current_lang = 'en';
     }
     // console.log("current lan", current_lang)
-    Localize.initialize({ key: mx_localizekey, rememberLanguage: true });
+    Localize.initialize({ key: mx_localizekey, rememberLanguage: true, retranslateOnNewPhrases: true });
 
 
     let selectTag = document.getElementById("langOptions");
