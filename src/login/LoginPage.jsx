@@ -133,19 +133,23 @@ import axios from 'axios';
   };
 
   SubmitLoginForm = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const nextUrl = urlParams.get('next');
+    const payload = {
+      email_or_username: "",
+      email: this.state.email,
+      password: this.state.password,
+      ...(nextUrl && { next: nextUrl }),
+    };
     getAuthenticatedHttpClient()
       .post(
         `${getConfig().LMS_BASE_URL}/api/user/v2/account/login_session/`,
-        {
-          "email_or_username": "",
-          "email": this.state.email,
-          "password": this.state.password
-        },
+        payload,
         this.requestConfig,
       ).then((res) => {
         if (res.status == 200 && res.data.success == true) {
-          window.location = res.data.redirect_url
-          Cookies.set('email', this.state.email, { domain: getConfig().SITE_DOMAIN[0], path: '/', secure: false, sameSite: "Lax" })   
+          window.location = res.data.redirect_url;
+          Cookies.set('email', this.state.email, { domain: getConfig().SITE_DOMAIN[0], path: '/', secure: false, sameSite: "Lax" })
         }
         
       })
