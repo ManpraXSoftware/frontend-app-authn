@@ -148,7 +148,12 @@ import axios from 'axios';
         this.requestConfig,
       ).then((res) => {
         if (res.status == 200 && res.data.success == true) {
-          window.location = res.data.redirect_url;
+          let redirectUrl = res.data.redirect_url;
+          if (nextUrl && nextUrl.startsWith('/explore-courses') && getConfig().EXPLORE_COURSE_URL) {
+            const mfeOrigin = new URL(getConfig().EXPLORE_COURSE_URL).origin;
+            redirectUrl = mfeOrigin + nextUrl;
+          }
+          window.location = redirectUrl;
           Cookies.set('email', this.state.email, { domain: getConfig().SITE_DOMAIN[0], path: '/', secure: false, sameSite: "Lax" })
         }
         
