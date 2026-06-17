@@ -19,7 +19,18 @@ import axios from 'axios';
       };
     }
 
+  handleBfcacheRestore = (event) => {
+    if (event.persisted) {
+      const edxloggedin = document.cookie.split(';').find(c => c.trim().startsWith('edxloggedin='));
+      const isLoggedIn = edxloggedin && edxloggedin.trim().split('=')[1] === 'true';
+      if (isLoggedIn) {
+        window.location.replace(`${getConfig().LMS_BASE_URL}/dashboard`);
+      }
+    }
+  }
+
   componentDidMount(){
+    window.addEventListener('pageshow', this.handleBfcacheRestore);
     document.getElementById("auth_page_title").innerText = "Welcome to Subodha : Login Page| Subodha"
     setTimeout(() => {
       const announcer = document.getElementById('page-announcement-live');
@@ -125,6 +136,10 @@ import axios from 'axios';
       }
     })
   }
+  componentWillUnmount() {
+    window.removeEventListener('pageshow', this.handleBfcacheRestore);
+  }
+
   requestConfig = {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     isPublic: true,
