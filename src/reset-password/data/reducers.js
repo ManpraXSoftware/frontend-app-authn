@@ -19,6 +19,7 @@ const reducer = (state = defaultState, action = null) => {
       return {
         ...state,
         status: PASSWORD_RESET_ERROR,
+        errorCode: action.payload.errorCode,
       };
     case RESET_PASSWORD.BEGIN:
       return {

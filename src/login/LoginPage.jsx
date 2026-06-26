@@ -305,7 +305,7 @@ import axios from 'axios';
                       </span>
                       <span className="icon fa" id="login-password-validation-icon" aria-hidden="true"></span>
                     </label>
-                    <input id="login-password" defaultValue={this.state.password} onChange={(e) => { this.setState({password:e.target.value}) }} type="password" name="password" className="input-block " maxlength="5000" required="" aria-invalid={false} aria-label="Enter Your Password below" aria-hidden={false} focusable={true} tabIndex={0} />
+                    <input id="login-password" defaultValue={this.state.password} onChange={(e) => { this.setState({password:e.target.value}) }} type="password" name="password" className="input-block " maxlength="75" required="" aria-invalid={false} aria-label="Enter Your Password below" aria-hidden={false} focusable={true} tabIndex={0} />
                     <span id="login-password-validation-error" className="tip error" aria-live="assertive">
                       <span className="sr-only"></span>
                       <span id="login-password-validation-error-msg"></span>

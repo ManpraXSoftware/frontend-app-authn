@@ -83,6 +83,11 @@ const messages = defineMessages({
     defaultMessage: 'An error has occurred because of too many requests. Please try again after some time.',
     description: 'Error message that appears when server responds with 429 error code',
   },
+  'invalid.token.heading': {
+    id: 'invalid.token.heading',
+    defaultMessage: 'Invalid Password Reset Link',
+    description: 'Heading shown when the password reset link is invalid or expired',
+  },
 });
 
 export default messages;

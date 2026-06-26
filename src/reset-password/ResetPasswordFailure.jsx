@@ -7,6 +7,8 @@ import PropTypes from 'prop-types';
 
 import { FORM_SUBMISSION_ERROR, PASSWORD_RESET, PASSWORD_VALIDATION_ERROR } from './data/constants';
 import messages from './messages';
+// import { LOGIN_PAGE } from '../data/constants';
+import { getConfig } from '@edx/frontend-platform';
 
 const ResetPasswordFailure = (props) => {
   const { formatMessage } = useIntl();
@@ -15,6 +17,17 @@ const ResetPasswordFailure = (props) => {
   let errorMessage = null;
   let heading = formatMessage(messages['reset.password.failure.heading']);
   switch (errorCode) {
+    case PASSWORD_RESET.INVALID_TOKEN:
+      heading = formatMessage(messages['invalid.token.heading']);
+      errorMessage = (
+        <>
+          This password reset link is invalid. It may have been used already.
+          To reset your password, go to the <a href={`${getConfig().LMS_BASE_URL}/login`}>sign-in</a> page
+          
+          and select <strong>Forgot password</strong>.
+        </>
+      );
+      break;
     case PASSWORD_RESET.FORBIDDEN_REQUEST:
       heading = formatMessage(messages['reset.server.rate.limit.error']);
       errorMessage = formatMessage(messages['rate.limit.error']);
@@ -24,7 +37,7 @@ const ResetPasswordFailure = (props) => {
       break;
     case PASSWORD_VALIDATION_ERROR:
       errorMessage = errorMsg;
-     break;
+      break;
     case FORM_SUBMISSION_ERROR:
       errorMessage = formatMessage(messages['reset.password.form.submission.error']);
       break;
