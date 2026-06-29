@@ -180,6 +180,13 @@ import axios from 'axios';
             // alert(`Login Failed: ${responseData.value}`);
             document.getElementById("login_error_box").style.display="block";
             document.getElementById("error_msg").innerHTML = responseData.value;
+            const resetLink = document.querySelector('#error_msg .form-toggle[data-type="password-reset"]');
+            if (resetLink) {
+              resetLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.setState({ loginPage: false });
+              });
+            }
           } else {
             alert("Login Failed: Invalid request. Please check your input.");
           }

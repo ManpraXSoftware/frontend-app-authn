@@ -27,20 +27,20 @@ const ERROR_MESSAGES = {
 
 const PageShell = ({ children }) => (
   <div className="section-bkg-wrapper">
-    <main id="main" tabIndex={-1} className="login-register-content">
+    <main id="main" tabIndex={-1} className="login-register-content" aria-label="Reset password">
       <div className="login-upper-logo">
         <p>
-          <span tabIndex={0}>
+          <span>
             <img src={SubodhaLogo} alt="Subodha logo with tag line Learning for all" />
           </span>
-          <span className="login-upper-text" tabIndex={0}>
+          <span className="login-upper-text">
             Subodha is a learning management system containing accessible resources for students with visual impairments and their educators.
           </span>
         </p>
       </div>
       <div id="content-container">
         <div id="login-and-registration-container" className="login-register">
-          <section id="login-anchor" className="form-type">
+          <section id="login-anchor" className="form-type" aria-label="Reset password form">
             <div id="login-form" className="form-wrapper">
               {children}
             </div>
@@ -51,12 +51,12 @@ const PageShell = ({ children }) => (
         <div className="for-align">
           <div className="for-text">
             <span>powered by</span>
-            <a className="subodha-logo">
+            <span className="subodha-logo">
               <img src={VELogo} alt="Vision Empower" />
-            </a>
-            <a className="edx-logo">
+            </span>
+            <span className="edx-logo">
               <img src="https://files.edx.org/openedx-logos/open-edx-logo-tag.png" width="175" height="70" alt="Powered by Open edX" />
-            </a>
+            </span>
           </div>
         </div>
       </div>
@@ -75,7 +75,7 @@ const InvalidLinkMessage = ({ errorCode }) => {
   if (isRateLimit || isServerError) {
     return (
       <div className="js-form-feedback" aria-live="assertive" tabIndex={-1}>
-        <div className="js-form-errors status submission-error">
+        <div className="js-form-errors status submission-error" role="alert">
           <h4 className="message-title">An error occurred.</h4>
           <ul className="message-copy">
             <li>{ERROR_MESSAGES[errorCode]}</li>
@@ -87,7 +87,7 @@ const InvalidLinkMessage = ({ errorCode }) => {
 
   return (
     <div className="js-form-feedback" aria-live="assertive" tabIndex={-1}>
-      <div className="status submission-error">
+      <div className="status submission-error" role="alert">
         <h4 className="message-title">Invalid Password Reset Link</h4>
         <ul className="message-copy" style={{ color: 'white' }}>
           <li>
@@ -266,7 +266,7 @@ const ResetPasswordPage = (props) => {
   if (props.status === TOKEN_STATE.PENDING) {
     if (token) {
       props.validateToken(token);
-      return <Spinner animation="border" variant="primary" className="spinner--position-centered" />;
+      return <Spinner animation="border" variant="primary" className="spinner--position-centered" aria-label="Validating reset link" />;
     }
     return (
       <PageShell>
@@ -288,12 +288,12 @@ const ResetPasswordPage = (props) => {
   if (props.status === 'success') {
     return (
       <PageShell>
-        <div className="js-form-feedback" aria-live="assertive" tabIndex={-1}>
-          <div className="js-password-reset-success status submission-success">
+        <div className="js-form-feedback" aria-live="polite" aria-atomic="true" tabIndex={-1}>
+          <div className="js-password-reset-success status submission-success" role="status">
             <h4 className="message-title">Password Reset Complete</h4>
             <div className="message-copy">
               <p>Your password has been reset successfully. You will be redirected to the sign-in page in {countdown} second{countdown !== 1 ? 's' : ''}.</p>
-              <p><a href={`${getConfig().LMS_BASE_URL}/login`}>Click here</a> if you are not redirected automatically.</p>
+              <p><a href={`${getConfig().LMS_BASE_URL}/login`}>Go to sign-in page</a> if you are not redirected automatically.</p>
             </div>
           </div>
         </div>
@@ -316,9 +316,9 @@ const ResetPasswordPage = (props) => {
       <Helmet>
         <title>Reset Password | Subodha</title>
       </Helmet>
-      <div className="js-form-feedback" aria-live="assertive" tabIndex={-1}>
+      <div className="js-form-feedback" aria-live="assertive" aria-atomic="true" tabIndex={-1}>
         {formErrorMessage && (
-          <div className="js-form-errors status submission-error">
+          <div className="js-form-errors status submission-error" role="alert">
             <h4 className="message-title">We couldn&apos;t reset your password.</h4>
             <ul className="message-copy">
               <li>{formErrorMessage}</li>
@@ -348,13 +348,12 @@ const ResetPasswordPage = (props) => {
             onFocus={handleOnFocus}
             aria-label="Enter your new password"
             aria-describedby="new-password-error"
-            tabIndex={0}
+            aria-invalid={Boolean(formErrors.newPassword)}
+            autoComplete="new-password"
           />
-          {formErrors.newPassword && (
-            <span id="new-password-error" className="tip error" style={{ color: 'white' }} aria-live="assertive">
-              {formErrors.newPassword}
-            </span>
-          )}
+          <span id="new-password-error" className="tip error" style={{ color: 'white' }} aria-live="assertive" role="alert">
+            {formErrors.newPassword || ''}
+          </span>
         </div>
         <div className="form-field">
           <label htmlFor="confirm-password">
@@ -373,18 +372,16 @@ const ResetPasswordPage = (props) => {
             onFocus={handleOnFocus}
             aria-label="Confirm your new password"
             aria-describedby="confirm-password-error"
-            tabIndex={0}
+            aria-invalid={Boolean(formErrors.confirmPassword)}
+            autoComplete="new-password"
           />
-          {formErrors.confirmPassword && (
-            <span id="confirm-password-error" className="tip error" style={{ color: 'white' }} aria-live="assertive">
-              {formErrors.confirmPassword}
-            </span>
-          )}
+          <span id="confirm-password-error" className="tip error" style={{ color: 'white' }} aria-live="assertive" role="alert">
+            {formErrors.confirmPassword || ''}
+          </span>
         </div>
         <button
           type="submit"
           className="action action-primary action-update"
-          tabIndex={0}
         >
           Reset password
         </button>
