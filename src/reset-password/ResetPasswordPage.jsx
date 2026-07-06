@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import { useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import axios from 'axios';
 
 import SubodhaLogo from '../images/Subodha Logo_1.png';
 import VELogo from '../images/VE logo.png';
@@ -51,12 +52,12 @@ const PageShell = ({ children }) => (
         <div className="for-align">
           <div className="for-text">
             <span>powered by</span>
-            <span className="subodha-logo">
+            <a className="subodha-logo">
               <img src={VELogo} alt="Vision Empower" />
-            </span>
-            <span className="edx-logo">
+            </a>
+            <a className="edx-logo">
               <img src="https://files.edx.org/openedx-logos/open-edx-logo-tag.png" width="175" height="70" alt="Powered by Open edX" />
-            </span>
+            </a>
           </div>
         </div>
       </div>
@@ -143,7 +144,7 @@ const ResetPasswordPage = (props) => {
     const mx_localizekey = Array.isArray(getConfig().MX_LOCALIZEKEY)
       ? getConfig().MX_LOCALIZEKEY[0]
       : getConfig().MX_LOCALIZEKEY;
-    if (!mx_localizekey) { return; }
+    if (!mx_localizekey) { return undefined; }
 
     const siteDomain = Array.isArray(getConfig().SITE_DOMAIN)
       ? getConfig().SITE_DOMAIN[0]
@@ -155,7 +156,7 @@ const ResetPasswordPage = (props) => {
     Localize.initialize({ key: mx_localizekey, rememberLanguage: true, retranslateOnNewPhrases: true });
 
     const selectTag = document.getElementById('langOptions');
-    if (!selectTag) { return; }
+    if (!selectTag) { return undefined; }
 
     const langNameMap = (code, name) => {
       if (code === 'hi-IN' || code === 'hi') { return `${name}(Hindi)`; }
@@ -165,19 +166,39 @@ const ResetPasswordPage = (props) => {
       if (code === 'ta-IN') { return 'தமிழ்(Tamil)'; }
       if (code === 'or') { return `${name}(Odia)`; }
       if (code === 'ml-IN' || code === 'ml') { return `${name}(Malayalam)`; }
+      if (code === 'gu') { return `${name}(Gujrati)`; }
       return name;
     };
 
+    const lang_dict = [];
+
     Localize.getAvailableLanguages((error, data) => {
-      if (error || !data) { return; }
-      // Clear existing options before appending
-      while (selectTag.options.length > 0) { selectTag.remove(0); }
-      data.forEach((e) => {
-        const option = new Option(langNameMap(e.code, e.name), e.code);
-        if (e.code === current_lang) { option.selected = true; }
-        selectTag.append(option);
-      });
+      if (!error && data) {
+        data.forEach((e) => {
+          lang_dict.push({ name: langNameMap(e.code, e.name), code: e.code });
+        });
+      }
     });
+
+    axios.get(`${getConfig().LMS_BASE_URL}/mx-user-info/get_user_profile`)
+      .then((res) => {
+        for (let i = 0; i < res.data.dark_languages.length; i++) {
+          const code = res.data.dark_languages[i][0];
+          const name = res.data.dark_languages[i][1];
+          if (code !== 'en') {
+            lang_dict.push({ name: langNameMap(code, name), code });
+          }
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        while (selectTag.options.length > 0) { selectTag.remove(0); }
+        lang_dict.forEach((lang) => {
+          const option = new Option(lang.name, lang.code);
+          if (lang.code === current_lang) { option.selected = true; }
+          selectTag.append(option);
+        });
+      });
 
     const handleLangChange = (e) => {
       const setLang = e.target.value;
@@ -188,7 +209,6 @@ const ResetPasswordPage = (props) => {
     };
 
     selectTag.addEventListener('change', handleLangChange);
-    // eslint-disable-next-line consistent-return
     return () => selectTag.removeEventListener('change', handleLangChange);
   }, []);
 
