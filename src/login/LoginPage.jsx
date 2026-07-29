@@ -56,7 +56,8 @@ import axios from 'axios';
 
 
     let selectTag = document.getElementById("langOptions");
-    selectTag.addEventListener('click', this.handleLangOptionsClick); 
+    selectTag.setAttribute("notranslate", "");
+    selectTag.addEventListener('click', this.handleLangOptionsClick);
     const lang_dict = []
     Localize.getAvailableLanguages((error, data) => {
       data.map((e, i) => {
