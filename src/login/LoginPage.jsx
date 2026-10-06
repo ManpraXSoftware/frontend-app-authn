@@ -137,6 +137,9 @@ import axios from 'axios';
           lang_dict.push({ "name": name, "code": code })
         }
       }
+      if (!isLocalize && darkLang.length === 0) {
+        selectTag.hidden = true; // only English released → no dropdown
+      }
       this.setState({ languages: lang_dict })
       this.state.languages.map((lang, i) => {
         var option = new Option(lang.name, lang.code)

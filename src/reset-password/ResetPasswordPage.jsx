@@ -206,6 +206,9 @@ const ResetPasswordPage = (props) => {
           if (lang.code === current_lang) { option.selected = true; }
           selectTag.append(option);
         });
+        if (!isLocalize && lang_dict.length <= 1) {
+          selectTag.hidden = true; // only English released → no dropdown
+        }
       });
     };
 
