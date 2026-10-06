@@ -52,13 +52,37 @@ import axios from 'axios';
       current_lang = 'en';
     }
     // console.log("current lan", current_lang)
-    Localize.initialize({ key: mx_localizekey, rememberLanguage: true, retranslateOnNewPhrases: true });
+    // Translation provider switch: "localize" (default) or "a4i"
+    const cfg = (k) => { const v = getConfig()[k]; return Array.isArray(v) ? v[0] : v; };
+    const isLocalize = (cfg('MX_TRANSLATION_PROVIDER') || 'localize') !== 'a4i';
+    if (isLocalize) {
+      // localize.js loaded here (not index.html) so it can be switched off by config
+      const localizeScript = document.createElement('script');
+      localizeScript.src = "https://global.localizecdn.com/localize.js";
+      localizeScript.onload = () => {
+        Localize.initialize({ key: mx_localizekey, rememberLanguage: true, retranslateOnNewPhrases: true });
+        loadLanguages();
+      };
+      document.body.append(localizeScript);
+    } else if (!document.getElementById('a4i-sdk')) {
+      const a4iScript = document.createElement('script');
+      a4iScript.id = 'a4i-sdk';
+      a4iScript.src = cfg('A4I_SDK_URL');
+      a4iScript.setAttribute('data-site-id', cfg('A4I_SITE_ID'));
+      a4iScript.setAttribute('data-api-base', cfg('A4I_API_BASE'));
+      a4iScript.defer = true;
+      document.body.append(a4iScript);
+    }
 
 
     let selectTag = document.getElementById("langOptions");
     selectTag.setAttribute("notranslate", "");
     selectTag.addEventListener('click', this.handleLangOptionsClick);
     const lang_dict = []
+    const loadLanguages = () => {
+    if (!isLocalize) {
+      lang_dict.push({ "name": "English", "code": "en" })
+    } else
     Localize.getAvailableLanguages((error, data) => {
       data.map((e, i) => {
         var lang_name = e.name;
@@ -128,6 +152,8 @@ import axios from 'axios';
         }
       }
     })
+    };
+    if (!isLocalize) loadLanguages();
     this.setState({ darkLanguages: darkLang })
     $('#langOptions > option').each(function () {
       if (current_lang == $(this).val()) {
@@ -240,8 +266,8 @@ import axios from 'axios';
     localStorage.setItem("langButtonClicked", true);
     localStorage.setItem("lang", e.target.value)
     Cookies.remove('lang', { domain: getConfig().SITE_DOMAIN[0], path: '/', secure: false, sameSite: "Lax" })   
-    Cookies.set('lang', setLang, { domain: getConfig().SITE_DOMAIN[0], path: '/', secure: false, sameSite: "Lax" })   
-    Localize.setLanguage(setLang);
+    Cookies.set('lang', setLang, { domain: getConfig().SITE_DOMAIN[0], path: '/', secure: false, sameSite: "Lax" })
+    if (window.Localize) Localize.setLanguage(setLang);
     $('#langOptions > option').each(function () {
       if (setLang == $(this).val()) {
         $(this).attr('selected', true);
@@ -250,7 +276,7 @@ import axios from 'axios';
       }
     })
 
-    setTimeout(() => {
+    if (window.Localize) setTimeout(() => {
       Localize.untranslate($(".myLang").get(0));
     }, 100);
 

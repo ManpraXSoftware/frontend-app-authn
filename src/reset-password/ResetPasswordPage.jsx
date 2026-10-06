@@ -153,7 +153,9 @@ const ResetPasswordPage = (props) => {
     let current_lang = Cookies.get('lang', { domain: siteDomain, path: '/', secure: false, sameSite: 'Lax' });
     if (!current_lang) { current_lang = 'en'; }
 
-    Localize.initialize({ key: mx_localizekey, rememberLanguage: true, retranslateOnNewPhrases: true });
+    // Translation provider switch: "localize" (default) or "a4i"
+    const cfg = (k) => { const v = getConfig()[k]; return Array.isArray(v) ? v[0] : v; };
+    const isLocalize = (cfg('MX_TRANSLATION_PROVIDER') || 'localize') !== 'a4i';
 
     const selectTag = document.getElementById('langOptions');
     if (!selectTag) { return undefined; }
@@ -172,6 +174,9 @@ const ResetPasswordPage = (props) => {
 
     const lang_dict = [];
 
+    const loadLanguages = () => {
+    if (isLocalize) {
+    Localize.initialize({ key: mx_localizekey, rememberLanguage: true, retranslateOnNewPhrases: true });
     Localize.getAvailableLanguages((error, data) => {
       if (!error && data) {
         data.forEach((e) => {
@@ -179,6 +184,9 @@ const ResetPasswordPage = (props) => {
         });
       }
     });
+    } else {
+      lang_dict.push({ name: 'English', code: 'en' });
+    }
 
     axios.get(`${getConfig().LMS_BASE_URL}/mx-user-info/get_user_profile`)
       .then((res) => {
@@ -199,13 +207,35 @@ const ResetPasswordPage = (props) => {
           selectTag.append(option);
         });
       });
+    };
+
+    if (isLocalize) {
+      // localize.js loaded here (not index.html) so it can be switched off by config
+      const localizeScript = document.createElement('script');
+      localizeScript.src = 'https://global.localizecdn.com/localize.js';
+      localizeScript.onload = loadLanguages;
+      document.body.append(localizeScript);
+    } else {
+      if (!document.getElementById('a4i-sdk')) {
+        const a4iScript = document.createElement('script');
+        a4iScript.id = 'a4i-sdk';
+        a4iScript.src = cfg('A4I_SDK_URL');
+        a4iScript.setAttribute('data-site-id', cfg('A4I_SITE_ID'));
+        a4iScript.setAttribute('data-api-base', cfg('A4I_API_BASE'));
+        a4iScript.defer = true;
+        document.body.append(a4iScript);
+      }
+      loadLanguages();
+    }
 
     const handleLangChange = (e) => {
       const setLang = e.target.value;
       Cookies.remove('lang', { domain: siteDomain, path: '/', secure: false, sameSite: 'Lax' });
       Cookies.set('lang', setLang, { domain: siteDomain, path: '/', secure: false, sameSite: 'Lax' });
-      Localize.setLanguage(setLang);
-      setTimeout(() => { Localize.untranslate(selectTag); }, 100);
+      if (window.Localize) {
+        Localize.setLanguage(setLang);
+        setTimeout(() => { Localize.untranslate(selectTag); }, 100);
+      }
     };
 
     selectTag.addEventListener('change', handleLangChange);
